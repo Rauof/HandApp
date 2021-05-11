@@ -8,6 +8,8 @@ import android.view.MenuItem
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
+import androidx.core.view.size
 import com.rauof.hand.databinding.ActivityListBinding
 
 class ListActivity : AppCompatActivity() {
@@ -30,6 +32,10 @@ class ListActivity : AppCompatActivity() {
             }
             else
                 showToast(getString(R.string.empty_player_name))
+        }
+
+        findViewById<Button>(R.id.calc).setOnClickListener {
+
         }
     }
 
@@ -69,6 +75,15 @@ class ListActivity : AppCompatActivity() {
                 startActivity(face)
                 true
             }
+
+            R.id.delete_all -> {
+                myHelper.deleteAllPlayer()
+                myCustomCursorAdapter.changeCursor(myHelper.getPlayer())
+                myCustomCursorAdapter.notifyDataSetChanged()
+                showToast(getString(R.string.deleting_all_players_succ))
+                true
+            }
+
             else -> super.onOptionsItemSelected(item)
         }
     }

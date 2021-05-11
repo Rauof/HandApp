@@ -8,5 +8,8 @@
     <string name="empty_player_name">Player name can not be empty</string>
     <string name="history">History</string>
     <string name="youtube">My youtube channel</string>
-    <string name="wellcome">You are wellcome to my Hand app , to communicate (## ra2of_it1@hotmail.com ##)</string>
+    <string name="calculate">Calculate</string>
+    <string name="delete_all">Delete all player</string>
+    <string name="deleting_all_players_succ">All players were deleted successfully</string>
+    <string name="wellcome">You are wellcome to my Hand app , to communicate (ra2of_it1@hotmail.com)</string>
 </resources>

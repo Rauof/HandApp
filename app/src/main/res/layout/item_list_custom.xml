@@ -4,6 +4,7 @@
     android:layout_height="@dimen/list_hieght"
     android:weightSum="6"
     android:orientation="horizontal"
+    android:layoutDirection="ltr"
     >
     <TextView
         android:id="@+id/auto_increament"
@@ -11,7 +12,8 @@
         android:layout_height="match_parent"
         android:layout_weight="0.6"
         android:gravity="center"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
+        android:background="#5D70ED"
         android:textSize="@dimen/body_text_size"
         android:hint="Numbering" />
     <TextView
@@ -23,16 +25,6 @@
         android:textColor="@color/black"
         android:layout_weight="1.4"
         android:hint="Name" />
-
-    <TextView
-        android:id="@+id/score"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textSize="@dimen/body_text_size"
-        android:textColor="@color/black"
-        android:layout_weight="1"
-        android:hint="Score" />
 
     <TextView
         android:id="@+id/last_game"
@@ -54,13 +46,24 @@
         android:layout_weight="1"
         android:text="@string/tot_games" />
 
+    <EditText
+        android:id="@+id/score"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textSize="@dimen/body_text_size"
+        android:inputType="number"
+        android:textColor="@color/black"
+        android:layout_weight="1"
+        android:hint="Score" />
+
     <Button
         android:id="@+id/history"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:background="@android:drawable/ic_menu_recent_history"
         android:layout_weight="1"
+        android:background="@android:drawable/ic_menu_recent_history"
         />
 
     <TextView

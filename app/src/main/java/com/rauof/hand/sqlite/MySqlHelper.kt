@@ -6,11 +6,11 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
-import android.service.autofill.FillEventHistory
+import android.provider.BaseColumns
 
 class MySqlHelper(context: Context) : SQLiteOpenHelper(context, "MyDatabase2", null, 2) {
 
-    companion object {
+    companion object : BaseColumns {
          val TABLE_NAME_PLAYING:String  = "PLAYING"
          val ID_COLUMN:String  = "_id"
          val NAME:String  = "NAME"
@@ -73,5 +73,28 @@ class MySqlHelper(context: Context) : SQLiteOpenHelper(context, "MyDatabase2", n
     fun getPlayer(): Cursor? {
         val db = this.readableDatabase
         return  db.query(TABLE_NAME_PLAYING,null,null,null,null,null,null)
+    }
+
+    fun setPlayer(){
+
+    }
+
+    fun deleteAllPlayer(){
+        val deletedRows = readableDatabase?.delete(TABLE_NAME_PLAYING, null, null)
+        onDowngrade(this.readableDatabase, 2 ,1)
+    }
+
+    fun sortPlayersDecreasing(){
+        val db = readableDatabase
+        val sortOrder = "$TOTLA_GAMES DESC"
+        val cursor = db.query(
+                TABLE_NAME_PLAYING,   // The table to query
+                null,             // The array of columns to return (pass null to get all)
+                null,              // The columns for the WHERE clause
+                null,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                sortOrder               // The sort order
+        )
     }
 }

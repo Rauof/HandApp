@@ -5,9 +5,8 @@ import android.database.Cursor
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.CursorAdapter
-import android.widget.TextView
+import android.widget.*
+import org.w3c.dom.Text
 
 class MyCustomCursorAdapter(context: Context, cursor:Cursor?):CursorAdapter(context,cursor,0) {
     private class ViewHolder {
@@ -15,9 +14,11 @@ class MyCustomCursorAdapter(context: Context, cursor:Cursor?):CursorAdapter(cont
         var score:TextView? = null
         var history:Button? = null
         var total_games:TextView? = null
+        //var total_games_value:Int = 0
         var last_game:TextView? = null
+        //var last_game_value:Int=0
         var auto_incr:TextView? = null
-        var histor_text:TextView? = null
+        //var histor_text:TextView? = null
     }
     override fun newView(context: Context?, cursor: Cursor?, parent: ViewGroup?): View {
         val layoutInflater =
@@ -49,13 +50,16 @@ class MyCustomCursorAdapter(context: Context, cursor:Cursor?):CursorAdapter(cont
         val viewHolder = view!!.tag as ViewHolder
         viewHolder.name?.text = cursor?.getString(cursor.getColumnIndex(MySqlHelper.NAME))
         viewHolder.auto_incr?.text = cursor?.getString(cursor.getColumnIndex(MySqlHelper.ID_COLUMN))
-        viewHolder.score?.text = cursor?.getString(cursor.getColumnIndex(MySqlHelper.CURRNET_SCORE))
         viewHolder.total_games?.text = cursor?.getString(cursor.getColumnIndex(MySqlHelper.TOTLA_GAMES))
         viewHolder.last_game?.text = cursor?.getString(cursor.getColumnIndex(MySqlHelper.LAST_GAME))
 
         viewHolder.history?.setOnClickListener{
 //            var txt  = viewHolder.histor_text
-//            Toast.makeText(context,txt?.text,Toast.LENGTH_SHORT).show()
+            val edT = viewHolder.score?.text
+            Toast.makeText(context,edT,Toast.LENGTH_SHORT).show()
         }
     }
+
+
+
 }

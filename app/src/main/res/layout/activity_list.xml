@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="3"
+    android:layoutDirection="ltr"
+    android:background="@color/white"
     >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.3"
+        android:layout_weight="0.5"
         android:weightSum="3"
         >
         <EditText
@@ -24,6 +27,10 @@
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:id="@+id/addplayer"
+            android:background="#092968"
+            android:textColor="@color/white"
+            android:layout_marginTop="@dimen/layout_margin"
+            android:layout_marginBottom="@dimen/layout_margin"
             android:text="@string/add"
             ></Button>
 
@@ -31,27 +38,40 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2.4">
+        android:layout_weight="2">
         <include android:id="@+id/content"
             layout="@layout/content_list" />
     </LinearLayout>
-    <LinearLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.3"
-        android:weightSum="1"
+        android:layout_weight="0.5"
+        android:background="#092968"
         android:orientation="horizontal">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:id="@+id/editTextNumber"
-            android:text="@string/wellcome"
-            android:textSize="@dimen/text_size"
-            android:textColor="@color/white"
-            android:background="@color/black"
-            >
-        </TextView>
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/editTextNumber"
+            android:layout_width="306dp"
+            android:layout_height="114dp"
+            android:gravity="center"
+            android:text="@string/wellcome"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/calc"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></TextView>
+
+        <Button
+            android:id="@+id/calc"
+            android:layout_width="79dp"
+            android:layout_height="77dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@string/calculate"
+            android:background="#059F14"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

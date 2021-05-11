@@ -7,4 +7,9 @@
         android:title="@string/youtube"
         app:showAsAction="never"/>
 
+    <item
+        android:id="@+id/delete_all"
+        android:title="@string/delete_all"
+        app:showAsAction="never"/>
+
 </menu>
