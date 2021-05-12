@@ -35,7 +35,23 @@ class ListActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.calc).setOnClickListener {
-
+            var arr_holding_scores = IntArray(binding.content.listview.size)
+            var isAnyScoreNull = false
+            for (i in 0 until binding.content.listview.size){
+                if(myCustomCursorAdapter.getScoreFromEditText(binding.content.listview[i]).isNotEmpty())
+                    arr_holding_scores[i] = myCustomCursorAdapter.getScoreFromEditText(binding.content.listview[i]).toInt()
+                else
+                    isAnyScoreNull = true;
+            }
+            if(!isAnyScoreNull){
+                for (i in 0 until binding.content.listview.size) {
+                    myHelper.updateData(arr_holding_scores[i], i+1)
+                    myCustomCursorAdapter.clearScoresFromEditText(binding.content.listview[i])
+                }
+                myCustomCursorAdapter.changeCursor(myHelper.getPlayer())
+                myCustomCursorAdapter.notifyDataSetChanged()
+            }else
+                showToast("Some scores are null")
         }
     }
 
@@ -48,8 +64,7 @@ class ListActivity : AppCompatActivity() {
         val result = myHelper.addPlayer(
                 binding.newplayerEditText.text.toString(),
                 0,
-                0,
-                "New player")
+                0)
         binding.content.apply {
             // get the data again from the database
             myCustomCursorAdapter.changeCursor(myHelper.getPlayer())
@@ -89,7 +104,7 @@ class ListActivity : AppCompatActivity() {
     }
 
     private fun showToast(str: String) {
-        Toast.makeText(this, str, Toast.LENGTH_LONG).show()
+        Toast.makeText(this, str, Toast.LENGTH_SHORT).show()
     }
 
 }

@@ -15,14 +15,13 @@ class MySqlHelper(context: Context) : SQLiteOpenHelper(context, "MyDatabase2", n
          val ID_COLUMN:String  = "_id"
          val NAME:String  = "NAME"
          val CURRNET_SCORE:String  = "Currentscore"
-         val HISTORY:String  = "HISTORY"
          val LAST_GAME:String  = "LastGame"
          val TOTLA_GAMES:String  = "TotlaGames"
     }
 
     private  val SQL_CREATE_ENTRIES =
         "CREATE TABLE ${TABLE_NAME_PLAYING} ( ${ID_COLUMN} INTEGER PRIMARY KEY AUTOINCREMENT, ${NAME} TEXT NOT NULL," +
-                " ${CURRNET_SCORE} INT NOT NULL, ${HISTORY} TEXT NOT NULL,  ${LAST_GAME} INT NOT NULL,${TOTLA_GAMES} INT NOT NULL)"
+                " ${CURRNET_SCORE} INT NOT NULL,  ${LAST_GAME} INT NOT NULL,${TOTLA_GAMES} INT NOT NULL)"
 
 
     private val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS ${TABLE_NAME_PLAYING}"
@@ -40,32 +39,14 @@ class MySqlHelper(context: Context) : SQLiteOpenHelper(context, "MyDatabase2", n
         onUpgrade(db,oldVersion,newVersion)
     }
 
-    fun getHighestScore():Int {
-        val mdb:SQLiteDatabase = this.readableDatabase
-        var cursor:Cursor? = null
-        try{
-             cursor = mdb.rawQuery("Select Max(VALUE) from HIGHEST;",null)
-            if(cursor.moveToFirst())
-            {
-                return cursor.getInt(0)
-            }
-        }catch (e:SQLiteException)
-        {
-            return  0
-        }
-        return  0
-        // Select max(Value) from Highest ;
-
-    }
-
-    fun addPlayer(name:String,totalscore:Int,lastscore:Int,history:String): Long? {
+    fun addPlayer(name:String,totalscore:Int,lastscore:Int): Long? {
         val db = this.writableDatabase
         val v = ContentValues().apply {
             put(NAME,name)
             put(CURRNET_SCORE,0)
             put(TOTLA_GAMES,totalscore)
             put(LAST_GAME,lastscore)
-            put(HISTORY,history)
+
         }
         return  db?.insert(TABLE_NAME_PLAYING,null,v)
     }
@@ -75,8 +56,9 @@ class MySqlHelper(context: Context) : SQLiteOpenHelper(context, "MyDatabase2", n
         return  db.query(TABLE_NAME_PLAYING,null,null,null,null,null,null)
     }
 
-    fun setPlayer(){
-
+    fun updatePlayer(arr : IntArray){
+        var db = this.readableDatabase
+        db.update(TABLE_NAME_PLAYING,null,null,null)
     }
 
     fun deleteAllPlayer(){
@@ -97,4 +79,16 @@ class MySqlHelper(context: Context) : SQLiteOpenHelper(context, "MyDatabase2", n
                 sortOrder               // The sort order
         )
     }
+
+    fun updateData(score:Int , id:Int) {
+        val db = writableDatabase
+        val contentValues = ContentValues()
+        //for(element in scores)
+            //contentValues.put(LAST_GAME, element)
+        contentValues.put(LAST_GAME, score)
+        val WhereArgs = arrayOf("$id")
+        val updatedRows = db.update(TABLE_NAME_PLAYING,contentValues, ID_COLUMN+" =?" ,WhereArgs)
+
+    }
+
 }

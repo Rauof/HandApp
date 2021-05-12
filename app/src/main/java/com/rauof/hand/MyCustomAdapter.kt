@@ -60,6 +60,15 @@ class MyCustomCursorAdapter(context: Context, cursor:Cursor?):CursorAdapter(cont
         }
     }
 
+    fun getScoreFromEditText(view: View?):String{
+        val viewHolder = view!!.tag as ViewHolder
+        val edT = viewHolder.score?.text.toString()
+        return edT
+    }
 
+    fun clearScoresFromEditText(view: View?){
+        val viewHolder = view!!.tag as ViewHolder
+        viewHolder.score?.setText("")
+    }
 
 }

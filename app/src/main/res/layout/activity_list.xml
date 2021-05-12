@@ -30,7 +30,6 @@
             android:background="#092968"
             android:textColor="@color/white"
             android:layout_marginTop="@dimen/layout_margin"
-            android:layout_marginBottom="@dimen/layout_margin"
             android:text="@string/add"
             ></Button>
 

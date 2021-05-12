@@ -34,18 +34,18 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:textSize="@dimen/body_text_size"
-            android:layout_weight="1"
-            android:text="@string/tot_games" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
             android:layout_weight="1"
             android:textSize="@dimen/body_text_size"
             android:gravity="center"
             android:text="@string/last_game" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="@dimen/body_text_size"
+            android:layout_weight="1"
+            android:text="@string/tot_games" />
 
         <TextView
             android:layout_width="0dp"
