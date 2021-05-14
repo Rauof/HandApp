@@ -46,7 +46,6 @@ class MySqlHelper(context: Context) : SQLiteOpenHelper(context, "MyDatabase2", n
             put(CURRNET_SCORE,0)
             put(TOTLA_GAMES,totalscore)
             put(LAST_GAME,lastscore)
-
         }
         return  db?.insert(TABLE_NAME_PLAYING,null,v)
     }
@@ -68,7 +67,7 @@ class MySqlHelper(context: Context) : SQLiteOpenHelper(context, "MyDatabase2", n
 
     fun sortPlayersDecreasing(){
         val db = readableDatabase
-        val sortOrder = "$TOTLA_GAMES DESC"
+        val sortOrder = "$LAST_GAME DESC"
         val cursor = db.query(
                 TABLE_NAME_PLAYING,   // The table to query
                 null,             // The array of columns to return (pass null to get all)
@@ -80,15 +79,36 @@ class MySqlHelper(context: Context) : SQLiteOpenHelper(context, "MyDatabase2", n
         )
     }
 
-    fun updateData(score:Int , id:Int) {
+    fun updateLastGame(score:Int , id:Int) {
         val db = writableDatabase
         val contentValues = ContentValues()
-        //for(element in scores)
-            //contentValues.put(LAST_GAME, element)
         contentValues.put(LAST_GAME, score)
         val WhereArgs = arrayOf("$id")
         val updatedRows = db.update(TABLE_NAME_PLAYING,contentValues, ID_COLUMN+" =?" ,WhereArgs)
 
+    }
+
+    fun updateTotalGame(totalscores: Int , id:Int) {
+        val db = writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(TOTLA_GAMES, totalscores)
+        val whereArgs = arrayOf("$id")
+        val updatedRows = db.update(TABLE_NAME_PLAYING,contentValues, ID_COLUMN+" =?" ,whereArgs)
+
+    }
+
+    fun getTotalGameScores(sizeOfList:Int): IntArray{
+        var x = IntArray(sizeOfList)
+        val db =  writableDatabase
+        val columns = arrayOf(LAST_GAME)
+        val cursor: Cursor = db.query(TABLE_NAME_PLAYING,columns,null,null,null,null,null)
+        var i =0
+        while (cursor.moveToNext()){
+            val index1 =  cursor.getColumnIndex(LAST_GAME)
+            x[i] = cursor.getInt(index1)
+            i++
+        }
+        return x
     }
 
 }

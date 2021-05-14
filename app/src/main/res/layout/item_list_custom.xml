@@ -13,7 +13,7 @@
         android:layout_weight="0.6"
         android:gravity="center"
         android:textColor="@color/white"
-        android:background="#5D70ED"
+        android:background="#7785E4"
         android:textSize="@dimen/body_text_size"
         android:hint="Numbering" />
     <TextView

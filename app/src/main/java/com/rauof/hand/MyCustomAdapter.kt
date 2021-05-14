@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import org.w3c.dom.Text
 
 class MyCustomCursorAdapter(context: Context, cursor:Cursor?):CursorAdapter(context,cursor,0) {
     private class ViewHolder {
@@ -14,9 +13,7 @@ class MyCustomCursorAdapter(context: Context, cursor:Cursor?):CursorAdapter(cont
         var score:TextView? = null
         var history:Button? = null
         var total_games:TextView? = null
-        //var total_games_value:Int = 0
         var last_game:TextView? = null
-        //var last_game_value:Int=0
         var auto_incr:TextView? = null
         //var histor_text:TextView? = null
     }
@@ -68,7 +65,12 @@ class MyCustomCursorAdapter(context: Context, cursor:Cursor?):CursorAdapter(cont
 
     fun clearScoresFromEditText(view: View?){
         val viewHolder = view!!.tag as ViewHolder
-        viewHolder.score?.setText("")
+        viewHolder.score?.text = ""
+    }
+
+    fun getTotalGames(view:View?):String{
+        val viewHolder = view!!.tag as ViewHolder
+        return viewHolder.total_games?.text.toString()
     }
 
 }
