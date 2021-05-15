@@ -15,7 +15,7 @@ class MyCustomCursorAdapter(context: Context, cursor:Cursor?):CursorAdapter(cont
         var total_games:TextView? = null
         var last_game:TextView? = null
         var auto_incr:TextView? = null
-        //var histor_text:TextView? = null
+        var historyText:TextView? = null
     }
     override fun newView(context: Context?, cursor: Cursor?, parent: ViewGroup?): View {
         val layoutInflater =
@@ -49,10 +49,9 @@ class MyCustomCursorAdapter(context: Context, cursor:Cursor?):CursorAdapter(cont
         viewHolder.auto_incr?.text = cursor?.getString(cursor.getColumnIndex(MySqlHelper.ID_COLUMN))
         viewHolder.total_games?.text = cursor?.getString(cursor.getColumnIndex(MySqlHelper.TOTLA_GAMES))
         viewHolder.last_game?.text = cursor?.getString(cursor.getColumnIndex(MySqlHelper.LAST_GAME))
-
+        viewHolder.historyText?.text = cursor?.getString(cursor.getColumnIndex(MySqlHelper.HISTORY))
         viewHolder.history?.setOnClickListener{
-//            var txt  = viewHolder.histor_text
-            val edT = viewHolder.score?.text
+            val edT = viewHolder.historyText?.text
             Toast.makeText(context,edT,Toast.LENGTH_SHORT).show()
         }
     }

@@ -13,7 +13,7 @@
         android:layout_weight="0.6"
         android:gravity="center"
         android:textColor="@color/white"
-        android:background="#7785E4"
+        android:background="#A6AFE8"
         android:textSize="@dimen/body_text_size"
         android:hint="Numbering" />
     <TextView
@@ -52,7 +52,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:textSize="@dimen/body_text_size"
-        android:inputType="number"
+        android:inputType="numberSigned"
         android:textColor="@color/black"
         android:layout_weight="1"
         android:hint="Score" />
@@ -67,13 +67,12 @@
         />
 
     <TextView
-        android:id="@+id/txt_hist"
+        android:id="@+id/historyText"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:gravity="center"
         android:textColor="@color/black"
         android:layout_weight="0"
-        android:text="Start playing"
         />
 
 </LinearLayout>

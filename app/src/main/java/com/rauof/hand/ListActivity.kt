@@ -13,9 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
 import androidx.core.view.size
 import com.rauof.hand.databinding.ActivityListBinding
-import java.text.DateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import java.text.SimpleDateFormat
 import java.util.*
 
 class ListActivity : AppCompatActivity() {
@@ -23,7 +21,7 @@ class ListActivity : AppCompatActivity() {
     private lateinit var myCustomCursorAdapter:MyCustomCursorAdapter
     private lateinit var myHelper: MySqlHelper
     private lateinit var binding: ActivityListBinding
-    private var history= mutableListOf<String>()
+    private var history = mutableListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +35,7 @@ class ListActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.addplayer).setOnClickListener {
-            if(binding.newplayerEditText.text.isNotEmpty()){
+            if(binding.newPlayerEditText.text.isNotEmpty()){
                 saveDataToDatabase()
                 clearText()
             }
@@ -48,25 +46,28 @@ class ListActivity : AppCompatActivity() {
         findViewById<Button>(R.id.calc).setOnClickListener {
             var arrHoldingScores = IntArray(binding.content.listview.size)
             var isAnyScoreNull = false
+            //test if all scores are entered
             for (i in 0 until binding.content.listview.size){
                 if(myCustomCursorAdapter.getScoreFromEditText(binding.content.listview[i]).isNotEmpty())
                     arrHoldingScores[i] = myCustomCursorAdapter.getScoreFromEditText(binding.content.listview[i]).toInt()
                 else
                     isAnyScoreNull = true;
             }
+
             if(!isAnyScoreNull){    // if all players' scores are inserted
                 //get the total games' scores from the data base
                 var lastTotalGameScores = myHelper.getTotalGameScores(binding.content.listview.size)
-
+                var numOfTimesPLayed = myHelper.getNumOfTimesPlayed(binding.content.listview.size)
                 //update all players' scores, last games and total scores
                 for (i in 0 until binding.content.listview.size) {
                     //update data for the player with index i
                     myHelper.updateLastGame(arrHoldingScores[i], i + 1)
                     myHelper.updateTotalGame(arrHoldingScores[i] + lastTotalGameScores[i], i + 1)
+                    myHelper.updateNumOfTimesPlayed(numOfTimesPLayed[i] ,i+1)
                     //clear the score value from the edit text
+
                     myCustomCursorAdapter.clearScoresFromEditText(binding.content.listview[i])
                 }
-
                 notifyDataChange()
             }else
                 showToast("some scores are null !")
@@ -86,7 +87,7 @@ class ListActivity : AppCompatActivity() {
 
     private fun saveDataToDatabase() {
         val result = myHelper.addPlayer(
-                binding.newplayerEditText.text.toString(),
+                binding.newPlayerEditText.text.toString(),
                 0,
                 0)
         binding.content.apply {
@@ -98,7 +99,7 @@ class ListActivity : AppCompatActivity() {
 
     private fun clearText() {
         binding.content.apply {
-            binding.newplayerEditText.setText("")
+            binding.newPlayerEditText.setText("")
         }
     }
 
@@ -125,11 +126,6 @@ class ListActivity : AppCompatActivity() {
             }
 
             R.id.trying -> {
-                var now = LocalDateTime.now()
-                val formatter = DateTimeFormatter.ofPattern("yyyy-MM- dd HH:mm:ss")
-//                val calendar = Calendar.getInstance()
-//                val currentDate: String = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime())
-                showToast(formatter.format(now))
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -141,3 +137,4 @@ class ListActivity : AppCompatActivity() {
     }
 
 }
+

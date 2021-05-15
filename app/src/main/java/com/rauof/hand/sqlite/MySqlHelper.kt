@@ -17,11 +17,13 @@ class MySqlHelper(context: Context) : SQLiteOpenHelper(context, "MyDatabase2", n
          val CURRNET_SCORE:String  = "Currentscore"
          val LAST_GAME:String  = "LastGame"
          val TOTLA_GAMES:String  = "TotlaGames"
+         val HISTORY:String = "History"
+        val Num_OF_TIMES_PLAYED:String = "NumOfTimesPlayed"
     }
 
     private  val SQL_CREATE_ENTRIES =
         "CREATE TABLE ${TABLE_NAME_PLAYING} ( ${ID_COLUMN} INTEGER PRIMARY KEY AUTOINCREMENT, ${NAME} TEXT NOT NULL," +
-                " ${CURRNET_SCORE} INT NOT NULL,  ${LAST_GAME} INT NOT NULL,${TOTLA_GAMES} INT NOT NULL)"
+                " ${CURRNET_SCORE} INT NOT NULL, ${Num_OF_TIMES_PLAYED} INT NOT NULL,  ${LAST_GAME} INT NOT NULL,${TOTLA_GAMES} INT NOT NULL, ${HISTORY} TEXT NOT NULL)"
 
 
     private val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS ${TABLE_NAME_PLAYING}"
@@ -46,6 +48,8 @@ class MySqlHelper(context: Context) : SQLiteOpenHelper(context, "MyDatabase2", n
             put(CURRNET_SCORE,0)
             put(TOTLA_GAMES,totalscore)
             put(LAST_GAME,lastscore)
+            put(HISTORY,"New Player!")
+            put(Num_OF_TIMES_PLAYED,0)
         }
         return  db?.insert(TABLE_NAME_PLAYING,null,v)
     }
@@ -85,7 +89,14 @@ class MySqlHelper(context: Context) : SQLiteOpenHelper(context, "MyDatabase2", n
         contentValues.put(LAST_GAME, score)
         val WhereArgs = arrayOf("$id")
         val updatedRows = db.update(TABLE_NAME_PLAYING,contentValues, ID_COLUMN+" =?" ,WhereArgs)
+    }
 
+    fun updateNumOfTimesPlayed(num:Int , id:Int) {
+        val db = writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(Num_OF_TIMES_PLAYED, num)
+        val WhereArgs = arrayOf("$id")
+        val updatedRows = db.update(TABLE_NAME_PLAYING,contentValues, ID_COLUMN+" =?" ,WhereArgs)
     }
 
     fun updateTotalGame(totalscores: Int , id:Int) {
@@ -105,6 +116,20 @@ class MySqlHelper(context: Context) : SQLiteOpenHelper(context, "MyDatabase2", n
         var i =0
         while (cursor.moveToNext()){
             val index1 =  cursor.getColumnIndex(LAST_GAME)
+            x[i] = cursor.getInt(index1)
+            i++
+        }
+        return x
+    }
+
+    fun getNumOfTimesPlayed(sizeOfList: Int): IntArray {
+        var x = IntArray(sizeOfList)
+        val db =  writableDatabase
+        val columns = arrayOf(Num_OF_TIMES_PLAYED)
+        val cursor: Cursor = db.query(TABLE_NAME_PLAYING,columns,null,null,null,null,null)
+        var i =0
+        while (cursor.moveToNext()){
+            val index1 = cursor.getColumnIndex(Num_OF_TIMES_PLAYED)
             x[i] = cursor.getInt(index1)
             i++
         }
