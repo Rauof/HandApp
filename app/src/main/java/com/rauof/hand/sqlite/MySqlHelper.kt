@@ -16,7 +16,7 @@ class MySqlHelper(context: Context) : SQLiteOpenHelper(context, "MyDatabase2", n
          val NAME:String  = "NAME"
          val CURRNET_SCORE:String  = "Currentscore"
          val LAST_GAME:String  = "LastGame"
-         val TOTLA_GAMES:String  = "TotlaGames"
+         val TOTLA_GAMES:String  = "TotalGames"
          val HISTORY:String = "History"
         val Num_OF_TIMES_PLAYED:String = "NumOfTimesPlayed"
     }
@@ -41,7 +41,7 @@ class MySqlHelper(context: Context) : SQLiteOpenHelper(context, "MyDatabase2", n
         onUpgrade(db,oldVersion,newVersion)
     }
 
-    fun addPlayer(name:String,totalscore:Int,lastscore:Int): Long? {
+    fun addPlayer(name:String,totalscore:Int,lastscore:Int,numOfTimesPlayed:Int): Long? {
         val db = this.writableDatabase
         val v = ContentValues().apply {
             put(NAME,name)
@@ -49,7 +49,8 @@ class MySqlHelper(context: Context) : SQLiteOpenHelper(context, "MyDatabase2", n
             put(TOTLA_GAMES,totalscore)
             put(LAST_GAME,lastscore)
             put(HISTORY,"New Player!")
-            put(Num_OF_TIMES_PLAYED,0)
+            put(Num_OF_TIMES_PLAYED,numOfTimesPlayed)
+
         }
         return  db?.insert(TABLE_NAME_PLAYING,null,v)
     }
@@ -69,9 +70,9 @@ class MySqlHelper(context: Context) : SQLiteOpenHelper(context, "MyDatabase2", n
         onDowngrade(this.readableDatabase, 2 ,1)
     }
 
-    fun sortPlayersDecreasing(){
+    fun sortPlayersDecreasing():Cursor{
         val db = readableDatabase
-        val sortOrder = "$LAST_GAME DESC"
+        val sortOrder = "$TOTLA_GAMES DESC"
         val cursor = db.query(
                 TABLE_NAME_PLAYING,   // The table to query
                 null,             // The array of columns to return (pass null to get all)
@@ -81,6 +82,7 @@ class MySqlHelper(context: Context) : SQLiteOpenHelper(context, "MyDatabase2", n
                 null,                   // don't filter by row groups
                 sortOrder               // The sort order
         )
+        return cursor
     }
 
     fun updateLastGame(score:Int , id:Int) {

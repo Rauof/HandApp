@@ -1,6 +1,7 @@
 package com.rauof.hand
 
 import android.content.Intent
+import android.graphics.Color.green
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -63,9 +64,8 @@ class ListActivity : AppCompatActivity() {
                     //update data for the player with index i
                     myHelper.updateLastGame(arrHoldingScores[i], i + 1)
                     myHelper.updateTotalGame(arrHoldingScores[i] + lastTotalGameScores[i], i + 1)
-                    myHelper.updateNumOfTimesPlayed(numOfTimesPLayed[i] ,i+1)
+                    myHelper.updateNumOfTimesPlayed(numOfTimesPLayed[i] + 1 ,i+1)
                     //clear the score value from the edit text
-
                     myCustomCursorAdapter.clearScoresFromEditText(binding.content.listview[i])
                 }
                 notifyDataChange()
@@ -75,8 +75,12 @@ class ListActivity : AppCompatActivity() {
     }
 
     private fun notifyDataChange() {
-        myHelper.sortPlayersDecreasing()
-        myCustomCursorAdapter.changeCursor(myHelper.getPlayer())
+//        myCustomCursorAdapter.changeBackgrounds(binding.content.listview[0] ,
+//            binding.content.listview[binding.content.listview.size])
+
+        myCustomCursorAdapter.changeCursor(myHelper.sortPlayersDecreasing())
+        binding.content.listview[0].setBackgroundColor(getColor(R.color.green))
+        binding.content.listview[binding.content.listview.size-1].setBackgroundColor(getColor(R.color.red))
         myCustomCursorAdapter.notifyDataSetChanged()
     }
 
@@ -89,7 +93,9 @@ class ListActivity : AppCompatActivity() {
         val result = myHelper.addPlayer(
                 binding.newPlayerEditText.text.toString(),
                 0,
-                0)
+                0,
+            0,
+        )
         binding.content.apply {
             // get the data again from the database
             myCustomCursorAdapter.changeCursor(myHelper.getPlayer())

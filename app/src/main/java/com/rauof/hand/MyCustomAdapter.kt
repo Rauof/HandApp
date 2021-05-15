@@ -1,13 +1,16 @@
 package com.rauof.hand
 
 import android.content.Context
+import android.content.Intent
 import android.database.Cursor
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.content.ContextCompat.startActivity
 
-class MyCustomCursorAdapter(context: Context, cursor:Cursor?):CursorAdapter(context,cursor,0) {
+class MyCustomCursorAdapter(context: Context, cursor: Cursor?):CursorAdapter(context, cursor, 0) {
     private class ViewHolder {
         var name: TextView? = null
         var score:TextView? = null
@@ -16,13 +19,15 @@ class MyCustomCursorAdapter(context: Context, cursor:Cursor?):CursorAdapter(cont
         var last_game:TextView? = null
         var auto_incr:TextView? = null
         var historyText:TextView? = null
+        var numOfTimesPlayed:TextView? = null
     }
     override fun newView(context: Context?, cursor: Cursor?, parent: ViewGroup?): View {
         val layoutInflater =
             LayoutInflater.from(context)
         val newView = layoutInflater
-            .inflate(R.layout.item_list_custom,parent
-                ,false)
+            .inflate(
+                R.layout.item_list_custom, parent, false
+            )
         val viewHolder = ViewHolder()
         viewHolder.name =
             newView.findViewById(R.id.name)
@@ -50,9 +55,11 @@ class MyCustomCursorAdapter(context: Context, cursor:Cursor?):CursorAdapter(cont
         viewHolder.total_games?.text = cursor?.getString(cursor.getColumnIndex(MySqlHelper.TOTLA_GAMES))
         viewHolder.last_game?.text = cursor?.getString(cursor.getColumnIndex(MySqlHelper.LAST_GAME))
         viewHolder.historyText?.text = cursor?.getString(cursor.getColumnIndex(MySqlHelper.HISTORY))
+        viewHolder.numOfTimesPlayed?.text = cursor?.getInt(cursor.getColumnIndex(MySqlHelper.Num_OF_TIMES_PLAYED)).toString()
         viewHolder.history?.setOnClickListener{
-            val edT = viewHolder.historyText?.text
-            Toast.makeText(context,edT,Toast.LENGTH_SHORT).show()
+            val edT = viewHolder.numOfTimesPlayed?.text
+            Toast.makeText(context, edT, Toast.LENGTH_SHORT).show()
+
         }
     }
 
@@ -67,9 +74,13 @@ class MyCustomCursorAdapter(context: Context, cursor:Cursor?):CursorAdapter(cont
         viewHolder.score?.text = ""
     }
 
-    fun getTotalGames(view:View?):String{
+    fun getTotalGames(view: View?):String{
         val viewHolder = view!!.tag as ViewHolder
         return viewHolder.total_games?.text.toString()
     }
+
+//    fun changeBackgrounds(view: View, view1: View) {
+//
+//    }
 
 }
