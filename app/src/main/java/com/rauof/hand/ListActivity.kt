@@ -1,7 +1,7 @@
 package com.rauof.hand
 
+import android.content.Context
 import android.content.Intent
-import android.graphics.Color.green
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -11,18 +11,17 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import androidx.core.view.size
 import com.rauof.hand.databinding.ActivityListBinding
 import java.text.SimpleDateFormat
-import java.util.*
 
 class ListActivity : AppCompatActivity() {
 
     private lateinit var myCustomCursorAdapter:MyCustomCursorAdapter
     private lateinit var myHelper: MySqlHelper
     private lateinit var binding: ActivityListBinding
-    private var history = mutableListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,9 +30,7 @@ class ListActivity : AppCompatActivity() {
         myHelper = MySqlHelper(applicationContext)
 
         customCusorAdapter()
-        for (i in 0 until binding.content.listview.size){
-            history.add(myCustomCursorAdapter.getTotalGames(binding.content.listview[i]))
-        }
+
 
         findViewById<Button>(R.id.addplayer).setOnClickListener {
             if(binding.newPlayerEditText.text.isNotEmpty()){
@@ -54,39 +51,53 @@ class ListActivity : AppCompatActivity() {
                 else
                     isAnyScoreNull = true;
             }
-
             if(!isAnyScoreNull){    // if all players' scores are inserted
                 //get the total games' scores from the data base
                 var lastTotalGameScores = myHelper.getTotalGameScores(binding.content.listview.size)
                 var numOfTimesPLayed = myHelper.getNumOfTimesPlayed(binding.content.listview.size)
+                var names = myHelper.getNames()
+                var histories = myHelper.getHistory()
                 //update all players' scores, last games and total scores
                 for (i in 0 until binding.content.listview.size) {
                     //update data for the player with index i
-                    myHelper.updateLastGame(arrHoldingScores[i], i + 1)
-                    myHelper.updateTotalGame(arrHoldingScores[i] + lastTotalGameScores[i], i + 1)
-                    myHelper.updateNumOfTimesPlayed(numOfTimesPLayed[i] + 1 ,i+1)
+                    myHelper.updateLastGame(arrHoldingScores[i], names.get(i))
+                    myHelper.updateTotalGame(arrHoldingScores[i] + lastTotalGameScores[i], names.get(i))
+                    myHelper.updateNumOfTimesPlayed(numOfTimesPLayed[i] + 1 ,names.get(i))
+                    val date = System.currentTimeMillis()
+                    val sdf = SimpleDateFormat("hh-mm-ss a")
+                    val dateString = sdf.format(date)
+                    var tempHis =  histories.get(i) + "\n" + dateString
+                    myHelper.updateHistory(tempHis ,names.get(i))
                     //clear the score value from the edit text
                     myCustomCursorAdapter.clearScoresFromEditText(binding.content.listview[i])
+                    binding.content.listview[i].setBackgroundColor(getColor(R.color.white))
                 }
                 notifyDataChange()
+                //coloring()
             }else
                 showToast("some scores are null !")
         }
     }
 
     private fun notifyDataChange() {
-//        myCustomCursorAdapter.changeBackgrounds(binding.content.listview[0] ,
-//            binding.content.listview[binding.content.listview.size])
-
-        myCustomCursorAdapter.changeCursor(myHelper.sortPlayersDecreasing())
-        binding.content.listview[0].setBackgroundColor(getColor(R.color.green))
-        binding.content.listview[binding.content.listview.size-1].setBackgroundColor(getColor(R.color.red))
+/*
+myCustomCursorAdapter.changeBackgrounds(binding.content.listview[0] ,
+binding.content.listview[binding.content.listview.size-1])
+*/
+        myCustomCursorAdapter.changeCursor(myHelper.sortPlayersIncreasing())
         myCustomCursorAdapter.notifyDataSetChanged()
     }
 
     fun customCusorAdapter() {
         myCustomCursorAdapter = MyCustomCursorAdapter(applicationContext, myHelper.getPlayer())
         binding.content.listview.adapter = myCustomCursorAdapter
+    }
+
+    private fun coloring() {
+        binding.content.listview[0].setBackgroundColor(getColor(R.color.green))
+        binding.content.listview[binding.content.listview.size-1].setBackgroundColor(getColor(R.color.red))
+        showToast(" " + binding.content.listview.size)
+
     }
 
     private fun saveDataToDatabase() {
@@ -142,5 +153,12 @@ class ListActivity : AppCompatActivity() {
         Toast.makeText(this, str, Toast.LENGTH_SHORT).show()
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        var names = myHelper.getNames()
+        for (i in 0 until binding.content.listview.size) {
+            myHelper.deleteAllHistories(names[i])
+        }
+    }
 }
 

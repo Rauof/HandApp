@@ -60,19 +60,14 @@ class MySqlHelper(context: Context) : SQLiteOpenHelper(context, "MyDatabase2", n
         return  db.query(TABLE_NAME_PLAYING,null,null,null,null,null,null)
     }
 
-    fun updatePlayer(arr : IntArray){
-        var db = this.readableDatabase
-        db.update(TABLE_NAME_PLAYING,null,null,null)
-    }
-
     fun deleteAllPlayer(){
-        val deletedRows = readableDatabase?.delete(TABLE_NAME_PLAYING, null, null)
+         readableDatabase?.delete(TABLE_NAME_PLAYING, null, null)
         onDowngrade(this.readableDatabase, 2 ,1)
     }
 
-    fun sortPlayersDecreasing():Cursor{
+    fun sortPlayersIncreasing():Cursor{
         val db = readableDatabase
-        val sortOrder = "$TOTLA_GAMES DESC"
+        val sortOrder = "$TOTLA_GAMES ASC"
         val cursor = db.query(
                 TABLE_NAME_PLAYING,   // The table to query
                 null,             // The array of columns to return (pass null to get all)
@@ -85,28 +80,37 @@ class MySqlHelper(context: Context) : SQLiteOpenHelper(context, "MyDatabase2", n
         return cursor
     }
 
-    fun updateLastGame(score:Int , id:Int) {
+    fun updateLastGame(score:Int ,name: String) {
         val db = writableDatabase
         val contentValues = ContentValues()
         contentValues.put(LAST_GAME, score)
-        val WhereArgs = arrayOf("$id")
-        val updatedRows = db.update(TABLE_NAME_PLAYING,contentValues, ID_COLUMN+" =?" ,WhereArgs)
+        val WhereArgs = arrayOf("$name")
+        db.update(TABLE_NAME_PLAYING,contentValues, NAME+" =?" ,WhereArgs)
     }
 
-    fun updateNumOfTimesPlayed(num:Int , id:Int) {
+    fun updateNumOfTimesPlayed(num:Int , name: String) {
         val db = writableDatabase
         val contentValues = ContentValues()
         contentValues.put(Num_OF_TIMES_PLAYED, num)
-        val WhereArgs = arrayOf("$id")
-        val updatedRows = db.update(TABLE_NAME_PLAYING,contentValues, ID_COLUMN+" =?" ,WhereArgs)
+        val WhereArgs = arrayOf("$name")
+         db.update(TABLE_NAME_PLAYING,contentValues, NAME+" =?" ,WhereArgs)
     }
 
-    fun updateTotalGame(totalscores: Int , id:Int) {
+    fun updateTotalGame(totalScores: Int ,name: String) {
         val db = writableDatabase
         val contentValues = ContentValues()
-        contentValues.put(TOTLA_GAMES, totalscores)
-        val whereArgs = arrayOf("$id")
-        val updatedRows = db.update(TABLE_NAME_PLAYING,contentValues, ID_COLUMN+" =?" ,whereArgs)
+        contentValues.put(TOTLA_GAMES, totalScores)
+        val whereArgs = arrayOf("$name")
+        db.update(TABLE_NAME_PLAYING,contentValues, NAME+" =?" ,whereArgs)
+
+    }
+
+    fun updateHistory(history: String  ,name: String) {
+        val db = writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(HISTORY, history)
+        val whereArgs = arrayOf("$name")
+        db.update(TABLE_NAME_PLAYING,contentValues, NAME+" =?" ,whereArgs)
 
     }
 
@@ -136,6 +140,42 @@ class MySqlHelper(context: Context) : SQLiteOpenHelper(context, "MyDatabase2", n
             i++
         }
         return x
+    }
+
+    fun getNames(): ArrayList<String> {
+        var x = ArrayList<String>()
+        val db =  writableDatabase
+        val columns = arrayOf(NAME)
+        val cursor: Cursor = db.query(TABLE_NAME_PLAYING,columns,null,null,null,null,null)
+        var i =0
+        while (cursor.moveToNext()){
+            val index1 = cursor.getColumnIndex(NAME)
+            x.add(cursor.getString(index1))
+            i++
+        }
+        return x
+    }
+
+    fun getHistory(): ArrayList<String> {
+        var x = ArrayList<String>()
+        val db =  writableDatabase
+        val columns = arrayOf(HISTORY)
+        val cursor: Cursor = db.query(TABLE_NAME_PLAYING,columns,null,null,null,null,null)
+        var i =0
+        while (cursor.moveToNext()){
+            val index1 = cursor.getColumnIndex(HISTORY)
+            x.add(cursor.getString(index1))
+            i++
+        }
+        return x
+    }
+
+    fun deleteAllHistories(name: String) {
+        val db = writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(HISTORY, "New Player")
+        val whereArgs = arrayOf("$name")
+        db.update(TABLE_NAME_PLAYING,contentValues, NAME+" =?" ,whereArgs)
     }
 
 }

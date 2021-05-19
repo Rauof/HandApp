@@ -6,16 +6,7 @@
     android:orientation="horizontal"
     android:layoutDirection="ltr"
     >
-    <TextView
-        android:id="@+id/auto_increament"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="0.6"
-        android:gravity="center"
-        android:textColor="@color/white"
-        android:background="#A6AFE8"
-        android:textSize="@dimen/body_text_size"
-        android:hint="Numbering" />
+
     <TextView
         android:id="@+id/name"
         android:layout_width="0dp"
@@ -23,7 +14,7 @@
         android:textSize="@dimen/body_text_size"
         android:gravity="center"
         android:textColor="@color/black"
-        android:layout_weight="1.4"
+        android:layout_weight="2"
         android:hint="Name" />
 
     <TextView
