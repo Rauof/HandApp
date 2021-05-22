@@ -13,7 +13,7 @@
         app:showAsAction="never"/>
 
     <item
-        android:id="@+id/trying"
+        android:id="@+id/hist"
         android:title="try"
         app:showAsAction="never"/>
 

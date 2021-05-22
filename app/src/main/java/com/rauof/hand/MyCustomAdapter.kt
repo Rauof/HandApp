@@ -38,10 +38,6 @@ class MyCustomCursorAdapter(context: Context, cursor: Cursor?):CursorAdapter(con
             newView.findViewById(R.id.last_game)
         viewHolder.total_games =
             newView.findViewById(R.id.total_games)
-//        viewHolder.histor_text =
-//            newView.findViewById(R.id.txt_hist)
-        //viewHolder.auto_incr = newView.findViewById(R.id.auto_increament)
-        // store the viewHolder object with the new view using the tag
         newView.tag = viewHolder
         return newView
     }
@@ -56,6 +52,7 @@ class MyCustomCursorAdapter(context: Context, cursor: Cursor?):CursorAdapter(con
         viewHolder.numOfTimesPlayed?.text = cursor?.getInt(cursor.getColumnIndex(MySqlHelper.Num_OF_TIMES_PLAYED)).toString()
         viewHolder.history?.setOnClickListener{
             val edT = viewHolder.historyText
+
             Toast.makeText(context, edT, Toast.LENGTH_SHORT).show()
         }
     }

@@ -48,7 +48,7 @@ class MySqlHelper(context: Context) : SQLiteOpenHelper(context, "MyDatabase2", n
             put(CURRNET_SCORE,0)
             put(TOTLA_GAMES,totalscore)
             put(LAST_GAME,lastscore)
-            put(HISTORY,"New Player!")
+            put(HISTORY,"New Player! + \n")
             put(Num_OF_TIMES_PLAYED,numOfTimesPlayed)
 
         }
@@ -58,6 +58,12 @@ class MySqlHelper(context: Context) : SQLiteOpenHelper(context, "MyDatabase2", n
     fun getPlayer(): Cursor? {
         val db = this.readableDatabase
         return  db.query(TABLE_NAME_PLAYING,null,null,null,null,null,null)
+    }
+
+    fun getPlayerForHistory(): Cursor? {
+        val db = this.readableDatabase
+        var colmuns = arrayOf("$NAME" , "$HISTORY")
+        return  db.query(TABLE_NAME_PLAYING,colmuns,null,null,null,null,null)
     }
 
     fun deleteAllPlayer(){

@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -30,7 +31,6 @@ class ListActivity : AppCompatActivity() {
         myHelper = MySqlHelper(applicationContext)
 
         customCusorAdapter()
-
 
         findViewById<Button>(R.id.addplayer).setOnClickListener {
             if(binding.newPlayerEditText.text.isNotEmpty()){
@@ -64,26 +64,22 @@ class ListActivity : AppCompatActivity() {
                     myHelper.updateTotalGame(arrHoldingScores[i] + lastTotalGameScores[i], names.get(i))
                     myHelper.updateNumOfTimesPlayed(numOfTimesPLayed[i] + 1 ,names.get(i))
                     val date = System.currentTimeMillis()
-                    val sdf = SimpleDateFormat("hh-mm-ss a")
+                    val sdf = SimpleDateFormat("hh-mm-ss")
                     val dateString = sdf.format(date)
-                    var tempHis =  histories.get(i) + "\n" + dateString
+                    var tempHis =  histories.get(i) + "  " +  arrHoldingScores[i] + "\n" + dateString
                     myHelper.updateHistory(tempHis ,names.get(i))
                     //clear the score value from the edit text
                     myCustomCursorAdapter.clearScoresFromEditText(binding.content.listview[i])
                     binding.content.listview[i].setBackgroundColor(getColor(R.color.white))
                 }
                 notifyDataChange()
-                //coloring()
+                coloring()
             }else
                 showToast("some scores are null !")
         }
     }
 
     private fun notifyDataChange() {
-/*
-myCustomCursorAdapter.changeBackgrounds(binding.content.listview[0] ,
-binding.content.listview[binding.content.listview.size-1])
-*/
         myCustomCursorAdapter.changeCursor(myHelper.sortPlayersIncreasing())
         myCustomCursorAdapter.notifyDataSetChanged()
     }
@@ -94,10 +90,11 @@ binding.content.listview[binding.content.listview.size-1])
     }
 
     private fun coloring() {
-        binding.content.listview[0].setBackgroundColor(getColor(R.color.green))
-        binding.content.listview[binding.content.listview.size-1].setBackgroundColor(getColor(R.color.red))
-        showToast(" " + binding.content.listview.size)
-
+        var g = binding.content.listview[0]
+        g.setBackgroundColor(getColor(R.color.green))
+        var r = binding.content.listview[binding.content.listview.size-1]
+        r.setBackgroundColor(getColor(R.color.red))
+        notifyDataChange()
     }
 
     private fun saveDataToDatabase() {
@@ -142,7 +139,9 @@ binding.content.listview[binding.content.listview.size-1])
                 true
             }
 
-            R.id.trying -> {
+            R.id.hist -> {
+                var intent = Intent(this , History::class.java)
+                startActivity(intent)
                 true
             }
             else -> super.onOptionsItemSelected(item)

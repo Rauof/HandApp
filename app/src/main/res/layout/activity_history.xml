@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".History">
 
-    <TextView
-        android:id="@+id/textView"
+    <ListView
+        android:id="@+id/h_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
